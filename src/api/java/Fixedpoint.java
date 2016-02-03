@@ -1,6 +1,6 @@
 /**
 Copyright (c) 2012-2014 Microsoft Corporation
-   
+
 Module Name:
 
     Fixedpoint.java
@@ -12,8 +12,8 @@ Author:
     @author Christoph Wintersteiger (cwinter) 2012-03-15
 
 Notes:
-    
-**/ 
+
+**/
 
 package com.microsoft.z3;
 
@@ -35,7 +35,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Sets the fixedpoint solver parameters.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void setParameters(Params value) throws Z3Exception
@@ -48,7 +48,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Retrieves parameter descriptions for Fixedpoint solver.
-     * 
+     *
      * @throws Z3Exception
      **/
     public ParamDescrs getParameterDescriptions() throws Z3Exception
@@ -59,7 +59,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Assert a constraint (or multiple) into the fixedpoint solver.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void add(BoolExpr ... constraints) throws Z3Exception
@@ -74,7 +74,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Register predicate as recursive relation.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void registerRelation(FuncDecl f) throws Z3Exception
@@ -87,7 +87,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Add rule into the fixedpoint solver.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void addRule(BoolExpr rule, Symbol name) throws Z3Exception
@@ -100,7 +100,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Add table fact to the fixedpoint solver.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void addFact(FuncDecl pred, int ... args) throws Z3Exception
@@ -116,7 +116,7 @@ public class Fixedpoint extends Z3Object
      * satisfiable if there is an instance of the query variables and a
      * derivation for it. The query is unsatisfiable if there are no derivations
      * satisfying the query variables.
-     * 
+     *
      * @throws Z3Exception
      **/
     public Status query(BoolExpr query) throws Z3Exception
@@ -141,7 +141,7 @@ public class Fixedpoint extends Z3Object
      * is satisfiable if there is an instance of some relation that is
      * non-empty. The query is unsatisfiable if there are no derivations
      * satisfying any of the relations.
-     * 
+     *
      * @throws Z3Exception
      **/
     public Status query(FuncDecl[] relations) throws Z3Exception
@@ -182,7 +182,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Update named rule into in the fixedpoint solver.
-     * 
+     *
      * @throws Z3Exception
      **/
     public void updateRule(BoolExpr rule, Symbol name) throws Z3Exception
@@ -196,7 +196,7 @@ public class Fixedpoint extends Z3Object
     /**
      * Retrieve satisfying instance or instances of solver, or definitions for
      * the recursive predicates that show unsatisfiability.
-     * 
+     *
      * @throws Z3Exception
      **/
     public Expr getAnswer() throws Z3Exception
@@ -226,7 +226,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Retrieve the cover of a predicate.
-     * 
+     *
      * @throws Z3Exception
      **/
     public Expr getCoverDelta(int level, FuncDecl predicate) throws Z3Exception
@@ -287,7 +287,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Retrieve set of rules added to fixedpoint context.
-     * 
+     *
      * @throws Z3Exception
      **/
     public BoolExpr[] getRules() throws Z3Exception
@@ -304,7 +304,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Retrieve set of assertions added to fixedpoint context.
-     * 
+     *
      * @throws Z3Exception
      **/
     public BoolExpr[] getAssertions() throws Z3Exception
@@ -321,7 +321,7 @@ public class Fixedpoint extends Z3Object
 
     /**
      * Fixedpoint statistics.
-     * 
+     *
      * @throws Z3Exception
      **/
     public Statistics getStatistics() throws Z3Exception
@@ -352,4 +352,43 @@ public class Fixedpoint extends Z3Object
         getContext().fixedpoint_DRQ().add(o);
         super.decRef(o);
     }
+
+   /* SPACER Specific */
+
+    /**
+     * Get Ground SAT values
+     *
+     * @throws Z3Exception
+     **/
+    public Expr getGroundSatAnswer() throws Z3Exception
+    {
+        long ans = Native.fixedpointGetGroundSatAnswer(getContext().nCtx(), getNativeObject());
+        return (ans == 0) ? null : Expr.create(getContext(), ans);
+    }
+
+    /**
+     * Get Rules Along Trace
+     *
+     * @throws Z3Exception
+     **/
+    public Expr getRulesAlongTrace() throws Z3Exception
+    {
+        long ans = Native.fixedpointGetRulesAlongTrace(getContext().nCtx(), getNativeObject());
+        return (ans == 0) ? null : Expr.create(getContext(), ans);
+    }
+
+
+    /**
+     * Get Rule Names Along Trace
+     *
+     * @throws Z3Exception
+     **/
+    public Expr getRuleNamesAlongTrace() throws Z3Exception
+    {
+        long ans = Native.fixedpointGetRuleNamesAlongTrace(getContext().nCtx(), getNativeObject());
+        return (ans == 0) ? null : Expr.create(getContext(), ans);
+    }
+
+
+
 }
